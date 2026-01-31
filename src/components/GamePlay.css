@@ -1,0 +1,214 @@
+.game-play {
+  width: 100%;
+  max-width: 400px;
+  padding: 0 16px;
+}
+
+.play-card {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.play-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.round-badge {
+  background: var(--accent-teal);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.difficulty-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.describer-section {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.describer-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.describer-name {
+  color: var(--accent-teal);
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.timer-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.timer-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--accent-yellow) calc(var(--progress, 1) * 360deg),
+    rgba(255, 255, 255, 0.1) calc(var(--progress, 1) * 360deg)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.timer-circle::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+}
+
+.timer-value {
+  position: relative;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.word-section {
+  margin-bottom: 20px;
+}
+
+.word-label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.word-hidden {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.word-hidden:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-teal);
+}
+
+.eye-icon {
+  opacity: 0.5;
+}
+
+.word-revealed {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.word-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-yellow);
+}
+
+.rule-box {
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.rule-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.rule-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rule-title {
+  color: var(--accent-yellow);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.rule-text {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.rule-text strong {
+  color: var(--accent-teal);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.skip-button,
+.guessed-button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.skip-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.skip-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.guessed-button {
+  background: var(--accent-teal);
+  color: white;
+}
+
+.guessed-button:hover {
+  filter: brightness(1.1);
+}
