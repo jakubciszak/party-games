@@ -21,6 +21,7 @@ describe('GamePlay', () => {
     currentRound: 1,
     currentPlayerIndex: 0,
     onRoundEnd: vi.fn(),
+    onBack: vi.fn(),
   }
 
   it('should display round number', () => {
