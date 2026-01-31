@@ -9,6 +9,7 @@ interface GamePlayProps {
   currentRound: number
   currentPlayerIndex: number
   onRoundEnd: (word: string, wasGuessed: boolean, updatedPlayers: Player[]) => void
+  onBack: () => void
 }
 
 export function GamePlay({
@@ -16,6 +17,7 @@ export function GamePlay({
   currentRound,
   currentPlayerIndex,
   onRoundEnd,
+  onBack,
 }: GamePlayProps) {
   const [currentWord, setCurrentWord] = useState('')
   const [isWordRevealed, setIsWordRevealed] = useState(false)
@@ -107,6 +109,10 @@ export function GamePlay({
   return (
     <div className="game-play slide-up">
       <div className="play-card">
+        <button className="back-button" onClick={onBack}>
+          <span className="back-arrow">‹</span> Menu
+        </button>
+
         <div className="play-header">
           <span className="round-badge">Runda {currentRound}</span>
           <span className="difficulty-badge">{getDifficultyLabel(settings.difficulty)}</span>

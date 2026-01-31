@@ -100,6 +100,7 @@ function App() {
           currentRound={currentRound}
           currentPlayerIndex={currentPlayerIndex}
           onRoundEnd={handleRoundEnd}
+          onBack={handleBackToMenu}
         />
       )}
       {screen === 'results' && resultsData && (
