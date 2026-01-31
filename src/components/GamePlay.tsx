@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { GameSettings, Player } from '../types'
-import { getWordForDifficulty } from '../utils/wordGenerator'
+import { getWordForDifficultyAsync } from '../utils/wordGenerator'
 import { getDifficultyLabel } from '../utils/difficulty'
 import './GamePlay.css'
 
@@ -21,6 +21,7 @@ export function GamePlay({
 }: GamePlayProps) {
   const [currentWord, setCurrentWord] = useState('')
   const [isWordRevealed, setIsWordRevealed] = useState(false)
+  const [isLoadingWord, setIsLoadingWord] = useState(true)
   const [timeRemaining, setTimeRemaining] = useState<number | null>(
     settings.timeLimit === 'unlimited' ? null : settings.timeLimit
   )
@@ -30,10 +31,27 @@ export function GamePlay({
   const currentPlayer = settings.players[currentPlayerIndex]
   const isUnlimitedTime = settings.timeLimit === 'unlimited'
 
-  // Generate word on mount
+  // Generate word on mount (async with API)
   useEffect(() => {
-    const word = getWordForDifficulty(settings.difficulty, settings.mode)
-    setCurrentWord(word)
+    let isMounted = true
+    setIsLoadingWord(true)
+
+    getWordForDifficultyAsync(settings.difficulty, settings.mode)
+      .then((word) => {
+        if (isMounted) {
+          setCurrentWord(word)
+          setIsLoadingWord(false)
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setIsLoadingWord(false)
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [settings.difficulty, settings.mode])
 
   // Timer logic
@@ -133,7 +151,12 @@ export function GamePlay({
 
         <div className="word-section">
           <p className="word-label">HASŁO — NACIŚNIJ ABY ODSŁONIĆ</p>
-          {isWordRevealed ? (
+          {isLoadingWord ? (
+            <div className="word-loading">
+              <span className="loading-spinner"></span>
+              <span>Ładowanie słowa...</span>
+            </div>
+          ) : isWordRevealed ? (
             <div className="word-revealed">
               <span className="word-text">{currentWord}</span>
             </div>

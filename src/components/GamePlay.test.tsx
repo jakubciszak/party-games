@@ -1,7 +1,14 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { GamePlay } from './GamePlay'
 import { GameSettings, Player } from '../types'
+
+// Mock the wordGenerator module
+vi.mock('../utils/wordGenerator', () => ({
+  getWordForDifficultyAsync: vi.fn().mockResolvedValue('testowe'),
+  getWordForDifficulty: vi.fn().mockReturnValue('testowe'),
+  prefetchWords: vi.fn(),
+}))
 
 describe('GamePlay', () => {
   const mockPlayers: Player[] = [
@@ -44,9 +51,11 @@ describe('GamePlay', () => {
     expect(screen.getByText('1:00')).toBeInTheDocument()
   })
 
-  it('should display touch to reveal text', () => {
+  it('should display touch to reveal text after loading', async () => {
     render(<GamePlay {...defaultProps} />)
-    expect(screen.getByText('Dotknij aby zobaczyć')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('Dotknij aby zobaczyć')).toBeInTheDocument()
+    })
   })
 
   it('should display skip and guessed buttons', () => {
@@ -67,13 +76,20 @@ describe('GamePlay', () => {
     expect(screen.getByText(/gestami/i)).toBeInTheDocument()
   })
 
-  it('should reveal word when touched', () => {
+  it('should reveal word when touched', async () => {
     render(<GamePlay {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Dotknij aby zobaczyć')).toBeInTheDocument()
+    })
 
     const revealButton = screen.getByText('Dotknij aby zobaczyć')
     fireEvent.click(revealButton)
 
-    // Word should now be visible (we can't check exact word as it's random)
-    expect(screen.queryByText('Dotknij aby zobaczyć')).not.toBeInTheDocument()
+    // Word should now be visible
+    await waitFor(() => {
+      expect(screen.queryByText('Dotknij aby zobaczyć')).not.toBeInTheDocument()
+      expect(screen.getByText('testowe')).toBeInTheDocument()
+    })
   })
 })

@@ -1,4 +1,5 @@
 import { Difficulty, GameMode, WordBank } from '../types'
+import { getRandomWordFromApi, prefetchWords, resetApiWordCache } from './wordApi'
 
 export const charadesWords: WordBank = {
   easy: [
@@ -153,4 +154,27 @@ export function getWordForDifficulty(difficulty: Difficulty, mode: GameMode): st
 export function resetUsedWords(): void {
   usedCharadesWords = []
   usedPGameWords = []
+  resetApiWordCache()
 }
+
+// Asynchroniczna wersja z API (z fallback do lokalnych słów)
+export async function getWordForDifficultyAsync(
+  difficulty: Difficulty,
+  mode: GameMode
+): Promise<string> {
+  try {
+    // Spróbuj pobrać słowo z API
+    const apiWord = await getRandomWordFromApi(difficulty, mode)
+    if (apiWord) {
+      return apiWord
+    }
+  } catch (error) {
+    console.warn('Błąd API, używam lokalnych słów:', error)
+  }
+
+  // Fallback do lokalnych słów
+  return getWordForDifficulty(difficulty, mode)
+}
+
+// Prefetch słów z API przy starcie gry
+export { prefetchWords }

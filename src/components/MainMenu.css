@@ -11,6 +11,289 @@
   backdrop-filter: blur(10px);
 }
 
+/* ========== LOGO STYLES ========== */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.logo {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Kostka do gry */
+.dice {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #fff 0%, #e8e8e8 100%);
+  border-radius: 12px;
+  box-shadow:
+    0 6px 0 #c9c9c9,
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dice-bounce 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+.dice-face {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-coral);
+  border-radius: 50%;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Układ kropek dla 6 */
+.dot-1 { top: 4px; left: 4px; }
+.dot-2 { top: 4px; right: 4px; }
+.dot-3 { top: 50%; left: 4px; transform: translateY(-50%); }
+.dot-4 { top: 50%; right: 4px; transform: translateY(-50%); }
+.dot-5 { bottom: 4px; left: 4px; }
+.dot-6 { bottom: 4px; right: 4px; }
+
+@keyframes dice-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(5deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+}
+
+/* Balony */
+.balloon {
+  position: absolute;
+  width: 24px;
+  height: 30px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: balloon-float 3s ease-in-out infinite;
+}
+
+.balloon::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 8px solid inherit;
+}
+
+.balloon::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.balloon-1 {
+  background: var(--accent-coral);
+  top: 0;
+  left: 10px;
+  animation-delay: 0s;
+}
+.balloon-1::before { border-top-color: var(--accent-coral); }
+
+.balloon-2 {
+  background: var(--accent-teal);
+  top: 5px;
+  right: 15px;
+  animation-delay: 0.5s;
+}
+.balloon-2::before { border-top-color: var(--accent-teal); }
+
+.balloon-3 {
+  background: var(--accent-yellow);
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 1s;
+  width: 20px;
+  height: 26px;
+}
+.balloon-3::before { border-top-color: var(--accent-yellow); }
+
+@keyframes balloon-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+.balloon-3 {
+  animation-name: balloon-float-center;
+}
+
+@keyframes balloon-float-center {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+/* Konfetti */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  animation: confetti-fall 2.5s ease-in-out infinite;
+}
+
+.confetti-1 {
+  background: var(--accent-coral);
+  top: 20px;
+  left: 0;
+  border-radius: 2px;
+  animation-delay: 0s;
+}
+
+.confetti-2 {
+  background: var(--accent-teal);
+  top: 30px;
+  right: 5px;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  animation-delay: 0.3s;
+}
+
+.confetti-3 {
+  background: var(--accent-yellow);
+  top: 50px;
+  left: -5px;
+  transform: rotate(45deg);
+  animation-delay: 0.6s;
+}
+
+.confetti-4 {
+  background: #a78bfa;
+  bottom: 30px;
+  right: 0;
+  border-radius: 2px;
+  animation-delay: 0.9s;
+}
+
+.confetti-5 {
+  background: #f472b6;
+  bottom: 20px;
+  left: 5px;
+  border-radius: 50%;
+  width: 5px;
+  height: 5px;
+  animation-delay: 1.2s;
+}
+
+@keyframes confetti-fall {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(15px) rotate(180deg);
+  }
+}
+
+/* Gwiazdki */
+.star {
+  position: absolute;
+  width: 0;
+  height: 0;
+  animation: star-twinkle 1.5s ease-in-out infinite;
+}
+
+.star::before,
+.star::after {
+  content: '';
+  position: absolute;
+  background: var(--accent-yellow);
+}
+
+.star::before {
+  width: 12px;
+  height: 4px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+}
+
+.star::after {
+  width: 4px;
+  height: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+}
+
+.star-1 {
+  top: 10px;
+  left: 35px;
+  animation-delay: 0s;
+}
+
+.star-2 {
+  bottom: 15px;
+  right: 25px;
+  animation-delay: 0.5s;
+}
+.star-2::before,
+.star-2::after {
+  background: var(--accent-coral);
+}
+
+.star-3 {
+  bottom: 25px;
+  left: 25px;
+  animation-delay: 1s;
+}
+.star-3::before,
+.star-3::after {
+  background: var(--accent-teal);
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.7);
+  }
+}
+
+/* ========== TITLE STYLES ========== */
 .title {
   text-align: center;
   margin-bottom: 8px;
@@ -20,11 +303,34 @@
   line-height: 1.1;
 }
 
-.title-party,
+.title-party {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-coral) 0%, #ff8a80 50%, var(--accent-yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-glow 3s ease-in-out infinite;
+}
+
 .title-games {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--accent-coral);
+  background: linear-gradient(135deg, var(--accent-teal) 0%, #5eead4 50%, var(--accent-yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-glow 3s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes title-glow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
 }
 
 .subtitle {
@@ -35,6 +341,7 @@
   margin-bottom: 24px;
 }
 
+/* ========== GAME MODES ========== */
 .game-modes {
   display: flex;
   flex-direction: column;
@@ -50,19 +357,40 @@
   flex-direction: column;
   gap: 4px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
 }
 
 .game-mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.game-mode-card:active {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .game-mode-card.charades {
-  background: var(--accent-coral);
+  background: linear-gradient(135deg, var(--accent-coral) 0%, #ff8a80 100%);
 }
 
 .game-mode-card.p-game {
-  background: var(--accent-teal);
+  background: linear-gradient(135deg, var(--accent-teal) 0%, #5eead4 100%);
 }
 
 .mode-icon {
@@ -74,14 +402,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  font-size: 1.25rem;
-  font-weight: 700;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: white;
   margin-bottom: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .mode-title {
@@ -89,10 +419,30 @@
   font-weight: 600;
   color: white;
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .mode-description {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
+}
+
+/* Atrybucja API */
+.api-attribution {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.api-attribution a {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.api-attribution a:hover {
+  color: var(--accent-teal);
 }
