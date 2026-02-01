@@ -320,8 +320,8 @@ describe('poocooApi', () => {
       expect(mockWords).toContain(result)
     })
 
-    it('should include startsWith=p for p-game mode', async () => {
-      const mockWords = ['piłka', 'pies', 'pizza']
+    it('should not include startsWith filter for p-game mode (words to guess are normal)', async () => {
+      const mockWords = ['kot', 'pies', 'ryba']
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => createMockResponse(mockWords),
@@ -329,8 +329,9 @@ describe('poocooApi', () => {
 
       await fetchWordForDifficulty('easy', 'p-game')
 
+      // In "Gra na P" words to guess are normal - only hints must start with 'p'
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('startsWith=p')
+        expect.not.stringContaining('startsWith=')
       )
     })
 

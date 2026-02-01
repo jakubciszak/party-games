@@ -117,12 +117,14 @@ export const pGameWordsByCategory: WordsByCategory = {
 }
 
 // Funkcja do pobierania słów z wybranych kategorii i poziomu trudności
+// W "Grze na P" hasła do odgadnięcia są normalne - tylko podpowiedzi muszą być na "P"
 export function getWordsFromCategories(
-  mode: GameMode,
+  _mode: GameMode,
   difficulty: Difficulty,
   categories: Category[]
 ): string[] {
-  const wordsByCategory = mode === 'charades' ? charadesWordsByCategory : pGameWordsByCategory
+  // Zawsze używamy normalnych słów - w "Grze na P" ograniczenie dotyczy podpowiedzi, nie haseł
+  const wordsByCategory = charadesWordsByCategory
   const selectedCategories = categories.length > 0 ? categories : ALL_CATEGORIES
 
   const allWords: string[] = []

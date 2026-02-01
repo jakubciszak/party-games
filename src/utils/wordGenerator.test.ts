@@ -124,8 +124,8 @@ describe('wordGenerator', () => {
 
       const result = await getWordForDifficultyAsync('medium', 'p-game')
 
-      // Should return a word from local p-game medium words
-      expect(pGameWords.medium).toContain(result)
+      // Should return a word from local charades medium words (p-game uses same words for guessing)
+      expect(charadesWords.medium).toContain(result)
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Failed to fetch from API'),
         expect.any(Error)
@@ -160,9 +160,8 @@ describe('wordGenerator', () => {
           )
 
           const result = await getWordForDifficultyAsync(difficulty, mode)
-          const wordBank = mode === 'charades' ? charadesWords : pGameWords
-
-          expect(wordBank[difficulty]).toContain(result)
+          // Both modes use charadesWords for words to guess
+          expect(charadesWords[difficulty]).toContain(result)
         }
       }
     })
