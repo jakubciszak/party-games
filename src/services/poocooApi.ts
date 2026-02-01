@@ -174,16 +174,13 @@ const difficultyConfig: Record<Difficulty, WordFetchConfig> = {
 
 /**
  * Fetches a random word for the given difficulty level
- * For 'p-game' mode, words start with 'p'
+ * In "Gra na P" mode, words to guess are normal - only hints must start with 'p'
  */
 export async function fetchWordForDifficulty(
   difficulty: Difficulty,
-  mode: GameMode
+  _mode: GameMode
 ): Promise<string> {
   const config = difficultyConfig[difficulty]
-
-  // For p-game, words must start with 'p'
-  const startsWith = mode === 'p-game' ? 'p' : undefined
 
   // Fetch words of varying lengths within the difficulty range
   const targetLength = Math.floor(
@@ -192,7 +189,6 @@ export async function fetchWordForDifficulty(
 
   const response = await fetchWords({
     length: targetLength,
-    startsWith,
     pageSize: 100,
   })
 
@@ -204,11 +200,10 @@ export async function fetchWordForDifficulty(
  */
 export async function fetchWordsForDifficulty(
   difficulty: Difficulty,
-  mode: GameMode,
+  _mode: GameMode,
   count: number = 10
 ): Promise<string[]> {
   const config = difficultyConfig[difficulty]
-  const startsWith = mode === 'p-game' ? 'p' : undefined
 
   const words: string[] = []
   const lengths = new Set<number>()
@@ -225,7 +220,6 @@ export async function fetchWordsForDifficulty(
     try {
       const response = await fetchWords({
         length,
-        startsWith,
         pageSize: Math.ceil(count / lengths.size) * 2,
       })
 
