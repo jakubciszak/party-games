@@ -15,6 +15,7 @@ describe('GamePlay', () => {
     timeLimit: 60,
     difficulty: 'easy',
     categories: [...ALL_CATEGORIES],
+    allowWordSkip: true,
   }
 
   const defaultProps = {

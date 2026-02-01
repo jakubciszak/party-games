@@ -36,6 +36,11 @@ export function GamePlay({
     setCurrentWord(word)
   }, [settings.difficulty, settings.mode, settings.categories])
 
+  const handleNewWord = () => {
+    const word = getWordForDifficulty(settings.difficulty, settings.mode, settings.categories)
+    setCurrentWord(word)
+  }
+
   // Timer logic
   useEffect(() => {
     if (isTimerRunning && timeRemaining !== null && timeRemaining > 0) {
@@ -141,6 +146,11 @@ export function GamePlay({
             <button className="word-hidden" onClick={handleRevealWord}>
               <span className="eye-icon">👁</span>
               <span>Dotknij aby zobaczyć</span>
+            </button>
+          )}
+          {settings.allowWordSkip && isWordRevealed && (
+            <button className="new-word-button" onClick={handleNewWord}>
+              🔄 Losuj nowe słowo
             </button>
           )}
         </div>
