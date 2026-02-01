@@ -2,6 +2,44 @@ export type GameMode = 'charades' | 'p-game'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
+export type Category =
+  | 'animals'
+  | 'food'
+  | 'objects'
+  | 'places'
+  | 'professions'
+  | 'sports'
+  | 'emotions'
+  | 'actions'
+  | 'nature'
+  | 'culture'
+
+export const ALL_CATEGORIES: Category[] = [
+  'animals',
+  'food',
+  'objects',
+  'places',
+  'professions',
+  'sports',
+  'emotions',
+  'actions',
+  'nature',
+  'culture',
+]
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  animals: 'Zwierzęta',
+  food: 'Jedzenie',
+  objects: 'Przedmioty',
+  places: 'Miejsca',
+  professions: 'Zawody',
+  sports: 'Sport',
+  emotions: 'Emocje',
+  actions: 'Czynności',
+  nature: 'Przyroda',
+  culture: 'Kultura',
+}
+
 export interface Player {
   id: string
   name: string
@@ -16,6 +54,7 @@ export interface GameSettings {
   players: Player[]
   timeLimit: TimeLimit
   difficulty: Difficulty
+  categories: Category[]
 }
 
 export interface GameState {

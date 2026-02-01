@@ -1,119 +1,142 @@
-import { Difficulty, GameMode, WordBank } from '../types'
+import { Difficulty, GameMode, Category, ALL_CATEGORIES } from '../types'
 import { fetchWordForDifficulty, resetUsedApiWords, PoocooApiError } from '../services/poocooApi'
 
-export const charadesWords: WordBank = {
-  easy: [
-    // Zwierzęta
-    'kot', 'pies', 'ryba', 'ptak', 'koń', 'krowa', 'świnia', 'kura', 'kaczka', 'królik',
-    'mysz', 'słoń', 'żyrafa', 'lew', 'małpa', 'niedźwiedź', 'wilk', 'lis', 'jeleń', 'motyl',
-    // Czynności proste
-    'spać', 'jeść', 'pić', 'biegać', 'skakać', 'tańczyć', 'śpiewać', 'płakać', 'śmiać się',
-    'myć zęby', 'czesać włosy', 'malować', 'rysować', 'czytać', 'pisać',
-    // Przedmioty codzienne
-    'piłka', 'lalka', 'samochód', 'telefon', 'telewizor', 'krzesło', 'stół', 'łóżko',
-    'parasol', 'kapelusz', 'buty', 'okulary', 'zegarek', 'torba', 'klucz',
-    // Zawody proste
-    'lekarz', 'strażak', 'policjant', 'nauczyciel', 'kucharz', 'kierowca',
-    // Jedzenie
-    'jabłko', 'banan', 'pizza', 'lody', 'ciasto', 'chleb', 'mleko', 'jajko',
-  ],
-  medium: [
-    // Czynności złożone
-    'grać w piłkę', 'jeździć na rowerze', 'pływać', 'wspinać się', 'gotować obiad',
-    'robić zdjęcie', 'prowadzić samochód', 'grać na gitarze', 'grać na pianinie',
-    'robić zakupy', 'sprzątać pokój', 'prasować ubrania', 'kosić trawę',
-    // Zawody
-    'pilot', 'astronauta', 'detektyw', 'magik', 'clown', 'aktor', 'muzyk',
-    'fotograf', 'fryzjer', 'dentysta', 'weterynarz', 'architekt',
-    // Sporty
-    'koszykówka', 'siatkówka', 'tenis', 'golf', 'hokej', 'łyżwiarstwo', 'narciarstwo',
-    'surfing', 'judo', 'boks', 'szermierka',
-    // Emocje i stany
-    'zmęczony', 'podekscytowany', 'zaskoczony', 'znudzony', 'przestraszony', 'dumny',
-    // Rzeczy
-    'helikopter', 'łódź podwodna', 'wulkan', 'tornado', 'tęcza', 'księżyc',
-    'robot', 'dinozaur', 'rycerz', 'pirat', 'ninja', 'superbohater',
-  ],
-  hard: [
-    // Pojęcia abstrakcyjne
-    'wolność', 'sprawiedliwość', 'demokracja', 'ironia', 'karma', 'nostalgia',
-    // Idiomy i powiedzenia
-    'bujać w obłokach', 'wziąć nogi za pas', 'mieć muchy w nosie', 'siedzieć jak na szpilkach',
-    'kręcić nosem', 'złapać byka za rogi', 'wywołać wilka z lasu',
-    // Filmy i książki
-    'Harry Potter', 'Gwiezdne Wojny', 'Władca Pierścieni', 'Titanic', 'Matrix',
-    'Król Lew', 'Shrek', 'Avatar',
-    // Zawody specjalistyczne
-    'chirurg', 'archeolog', 'paleontolog', 'meteorolog', 'kaskader', 'dyrygent',
-    // Złożone czynności
-    'negocjować kontrakt', 'prowadzić wywiad', 'składać origami', 'żonglować',
-    'hipnotyzować', 'medytować', 'surfować po internecie',
-    // Historyczne
-    'gladiator', 'faraon', 'wiking', 'samuraj', 'muszkieter',
-  ],
+// Struktura słów z podziałem na kategorie i poziomy trudności
+export interface CategoryWords {
+  easy: string[]
+  medium: string[]
+  hard: string[]
 }
 
-export const pGameWords: WordBank = {
-  easy: [
-    // Rodzina
-    'mama', 'tata', 'babcia', 'dziadek', 'siostra', 'brat', 'ciocia', 'wujek',
-    // Zwierzęta
-    'pies', 'kot', 'koń', 'krowa', 'kura', 'kaczka', 'ryba', 'ptak', 'mysz', 'żaba',
-    'słoń', 'lew', 'małpa', 'niedźwiedź', 'królik', 'jeż', 'motyl', 'pszczoła',
-    // Jedzenie
-    'jabłko', 'banan', 'truskawka', 'mleko', 'chleb', 'ser', 'jajko', 'masło',
-    'ciasto', 'lody', 'pizza', 'zupa', 'kanapka', 'sok', 'woda',
-    // Przedmioty
-    'piłka', 'lalka', 'klocki', 'kredki', 'książka', 'plecak', 'buty', 'czapka',
-    'rękawiczki', 'parasol', 'krzesło', 'stół', 'łóżko', 'lampa', 'okno', 'drzwi',
-    // Miejsca
-    'dom', 'szkoła', 'sklep', 'park', 'plaża', 'las', 'góry', 'zoo',
-    // Pojazdy
-    'samochód', 'autobus', 'rower', 'pociąg', 'samolot', 'statek', 'helikopter',
-  ],
-  medium: [
-    // Zawody
-    'lekarz', 'nauczyciel', 'strażak', 'policjant', 'kucharz', 'aktor', 'piosenkarz',
-    'malarz', 'sportowiec', 'kierowca', 'fryzjer', 'ogrodnik', 'mechanik',
-    // Sporty
-    'piłka nożna', 'koszykówka', 'siatkówka', 'tenis', 'pływanie', 'bieganie',
-    'jazda na rowerze', 'narty', 'łyżwy', 'taniec',
-    // Przedmioty
-    'komputer', 'telefon', 'telewizor', 'lodówka', 'pralka', 'mikser', 'odkurzacz',
-    'aparat fotograficzny', 'słuchawki', 'zegarek', 'okulary', 'portfel',
-    // Miejsca
-    'restauracja', 'kino', 'teatr', 'muzeum', 'biblioteka', 'szpital', 'lotnisko',
-    'dworzec', 'stadion', 'basen', 'siłownia',
-    // Emocje
-    'radość', 'smutek', 'strach', 'złość', 'zaskoczenie', 'zmęczenie',
-    // Pogoda
-    'słońce', 'deszcz', 'śnieg', 'wiatr', 'burza', 'tęcza', 'chmura', 'mgła',
-    // Przyroda
-    'kwiat', 'drzewo', 'trawa', 'rzeka', 'jezioro', 'morze', 'góra', 'dolina',
-  ],
-  hard: [
-    // Pojęcia abstrakcyjne
-    'przyjaźń', 'miłość', 'szczęście', 'mądrość', 'odwaga', 'cierpliwość',
-    'sprawiedliwość', 'wolność', 'sukces', 'porażka', 'nadzieja', 'wiara',
-    // Nauka
-    'grawitacja', 'elektryczność', 'magnetyzm', 'ewolucja', 'fotosynteza',
-    'atmosfera', 'klimat', 'ekosystem', 'galaktyka', 'wszechświat',
-    // Zawody specjalistyczne
-    'archeolog', 'astronom', 'biolog', 'chemik', 'fizyk', 'matematyk',
-    'programista', 'architekt', 'prawnik', 'dziennikarz', 'tłumacz',
-    // Instrumenty
-    'fortepian', 'skrzypce', 'gitara', 'trąbka', 'saksofon', 'perkusja', 'flet',
-    // Historia i kultura
-    'rycerz', 'zamek', 'piramida', 'faraon', 'cesarz', 'rewolucja', 'demokracja',
-    // Technologia
-    'internet', 'satelita', 'robot', 'sztuczna inteligencja', 'wirtualna rzeczywistość',
-    // Zjawiska
-    'zaćmienie', 'zorza polarna', 'trzęsienie ziemi', 'tsunami', 'wulkan',
-    // Filozofia
-    'etyka', 'logika', 'filozofia', 'świadomość', 'wyobraźnia', 'kreatywność',
-  ],
+export type WordsByCategory = Record<Category, CategoryWords>
+
+export const charadesWordsByCategory: WordsByCategory = {
+  animals: {
+    easy: ['kot', 'pies', 'ryba', 'ptak', 'koń', 'krowa', 'świnia', 'kura', 'kaczka', 'królik', 'mysz', 'słoń', 'żyrafa', 'lew', 'małpa', 'niedźwiedź', 'wilk', 'lis', 'jeleń', 'motyl'],
+    medium: ['pingwin', 'krokodyl', 'kangur', 'papuga', 'wąż', 'rekin', 'delfin', 'wieloryb', 'tygrys', 'zebra', 'goryl', 'panda', 'koala', 'wielbłąd', 'nosorożec'],
+    hard: ['kameleon', 'ośmiornica', 'meduza', 'koliber', 'mrówkojad', 'leniwiec', 'pancernik', 'szympans', 'orangutan', 'lampart'],
+  },
+  food: {
+    easy: ['jabłko', 'banan', 'pizza', 'lody', 'ciasto', 'chleb', 'mleko', 'jajko', 'ser', 'pomidor', 'marchewka', 'ziemniak'],
+    medium: ['spaghetti', 'hamburger', 'sushi', 'pierogi', 'naleśniki', 'kanapka', 'zupa', 'sałatka', 'frytki', 'omlet'],
+    hard: ['tiramisu', 'ratatouille', 'paella', 'gazpacho', 'falafel', 'curry', 'dim sum', 'risotto'],
+  },
+  objects: {
+    easy: ['piłka', 'lalka', 'samochód', 'telefon', 'telewizor', 'krzesło', 'stół', 'łóżko', 'parasol', 'kapelusz', 'buty', 'okulary', 'zegarek', 'torba', 'klucz'],
+    medium: ['helikopter', 'łódź podwodna', 'mikroskop', 'teleskop', 'wentylator', 'odkurzacz', 'pralka', 'lodówka', 'mikser', 'laptop'],
+    hard: ['stetoskop', 'defibrylator', 'oscyloskop', 'astrolabium', 'saksofon', 'akordeon', 'kontrabas'],
+  },
+  places: {
+    easy: ['dom', 'szkoła', 'sklep', 'park', 'plaża', 'las', 'góry', 'zoo', 'kino', 'basen'],
+    medium: ['restauracja', 'teatr', 'muzeum', 'biblioteka', 'szpital', 'lotnisko', 'dworzec', 'stadion', 'siłownia', 'aquapark'],
+    hard: ['obserwatorium', 'planetarium', 'amfiteatr', 'katedra', 'klasztor', 'latarnia morska', 'wieża Eiffla'],
+  },
+  professions: {
+    easy: ['lekarz', 'strażak', 'policjant', 'nauczyciel', 'kucharz', 'kierowca', 'fryzjer', 'ogrodnik'],
+    medium: ['pilot', 'astronauta', 'detektyw', 'magik', 'aktor', 'muzyk', 'fotograf', 'dentysta', 'weterynarz', 'architekt'],
+    hard: ['chirurg', 'archeolog', 'paleontolog', 'meteorolog', 'kaskader', 'dyrygent', 'choreograf', 'spiker'],
+  },
+  sports: {
+    easy: ['piłka nożna', 'pływanie', 'bieganie', 'skakanie', 'tańczenie'],
+    medium: ['koszykówka', 'siatkówka', 'tenis', 'golf', 'hokej', 'łyżwiarstwo', 'narciarstwo', 'surfing', 'judo', 'boks'],
+    hard: ['szermierka', 'polo', 'curling', 'biathlon', 'bobslej', 'skeleton', 'parkour', 'triathlon'],
+  },
+  emotions: {
+    easy: ['śmiać się', 'płakać', 'złościć się', 'bać się', 'cieszyć się'],
+    medium: ['zmęczony', 'podekscytowany', 'zaskoczony', 'znudzony', 'przestraszony', 'dumny', 'zawstydzony', 'zdenerwowany'],
+    hard: ['nostalgia', 'melancholia', 'euforia', 'frustracja', 'ekscytacja', 'desperacja', 'kontemplacja'],
+  },
+  actions: {
+    easy: ['spać', 'jeść', 'pić', 'biegać', 'skakać', 'myć zęby', 'czesać włosy', 'malować', 'rysować', 'czytać', 'pisać'],
+    medium: ['grać w piłkę', 'jeździć na rowerze', 'wspinać się', 'gotować obiad', 'robić zdjęcie', 'prowadzić samochód', 'grać na gitarze', 'robić zakupy'],
+    hard: ['negocjować kontrakt', 'prowadzić wywiad', 'składać origami', 'żonglować', 'hipnotyzować', 'medytować', 'surfować po internecie'],
+  },
+  nature: {
+    easy: ['słońce', 'księżyc', 'gwiazdy', 'drzewo', 'kwiat', 'trawa', 'deszcz', 'śnieg'],
+    medium: ['wulkan', 'tornado', 'tęcza', 'wodospad', 'jaskinia', 'pustynia', 'dżungla', 'góra lodowa'],
+    hard: ['zorza polarna', 'zaćmienie', 'trzęsienie ziemi', 'tsunami', 'lawina', 'gejzer', 'delta rzeki'],
+  },
+  culture: {
+    easy: ['książka', 'film', 'piosenka', 'obraz', 'rzeźba'],
+    medium: ['Harry Potter', 'Gwiezdne Wojny', 'Król Lew', 'Shrek', 'Batman', 'Superman', 'Spider-Man'],
+    hard: ['Władca Pierścieni', 'Matrix', 'Avatar', 'Titanic', 'Mona Lisa', 'Romeo i Julia', 'Hamlet'],
+  },
 }
 
+export const pGameWordsByCategory: WordsByCategory = {
+  animals: {
+    easy: ['pies', 'ptak', 'pszczoła', 'paw', 'papuga', 'pingwin', 'panda'],
+    medium: ['pantera', 'pelikan', 'piton', 'pirania', 'ptasznik', 'puma'],
+    hard: ['pazurnik', 'pasożyt', 'pstrąg', 'perkoz', 'pluszcz'],
+  },
+  food: {
+    easy: ['pizza', 'pomidor', 'pieróg', 'pączek', 'pomarańcza', 'papryka'],
+    medium: ['pasztet', 'piernik', 'placek', 'pstrąg', 'pieczeń', 'polewka'],
+    hard: ['profiterole', 'panna cotta', 'prosciutto', 'polędwica', 'pistacje'],
+  },
+  objects: {
+    easy: ['piłka', 'parasol', 'poduszka', 'plecak', 'piórko', 'pędzel'],
+    medium: ['pralka', 'projektor', 'patelnia', 'portfel', 'przecinak', 'pozytywka'],
+    hard: ['perforacja', 'pryzmat', 'pendrive', 'paralaksa', 'perystaltyka'],
+  },
+  places: {
+    easy: ['park', 'plaża', 'poczta', 'piekarnia', 'parking'],
+    medium: ['pensjonat', 'port', 'posterunek', 'planetarium', 'pawilon'],
+    hard: ['panteon', 'pergola', 'pasaż', 'patio', 'promenada'],
+  },
+  professions: {
+    easy: ['policjant', 'pilot', 'piekarz', 'piosenkarz'],
+    medium: ['programista', 'prawnik', 'psycholog', 'położna', 'patomorfolog'],
+    hard: ['paleontolog', 'psychiatra', 'proktolog', 'periodontolog'],
+  },
+  sports: {
+    easy: ['piłka nożna', 'pływanie', 'ping-pong'],
+    medium: ['polo', 'parkour', 'paintball', 'piłka ręczna', 'podnoszenie ciężarów'],
+    hard: ['petanque', 'pięciobój', 'parasailing', 'paralotniarstwo'],
+  },
+  emotions: {
+    easy: ['płakać', 'przytulać', 'podziwiać'],
+    medium: ['przerażenie', 'podekscytowanie', 'pewność', 'podziw', 'pretensja'],
+    hard: ['próżność', 'pycha', 'pokora', 'pogarda', 'patriotyzm'],
+  },
+  actions: {
+    easy: ['pisać', 'pić', 'prać', 'prasować', 'pukać'],
+    medium: ['przepisywać', 'przekładać', 'przebierać', 'przecinać', 'przestawiać'],
+    hard: ['programować', 'projektować', 'prezentować', 'przeprowadzać', 'przemieszczać'],
+  },
+  nature: {
+    easy: ['plaża', 'pole', 'puszcza', 'potok'],
+    medium: ['polana', 'pustynia', 'przepaść', 'pogoda', 'powódź'],
+    hard: ['permafrost', 'pradolina', 'półwysep', 'przełęcz', 'przesmyk'],
+  },
+  culture: {
+    easy: ['piosenka', 'plakat', 'pocztówka'],
+    medium: ['Pinokio', 'Piotruś Pan', 'Piękna i Bestia', 'Pocahontas'],
+    hard: ['Paragraf 22', 'Pianista', 'Prestiż', 'Pulp Fiction'],
+  },
+}
+
+// Funkcja do pobierania słów z wybranych kategorii i poziomu trudności
+export function getWordsFromCategories(
+  mode: GameMode,
+  difficulty: Difficulty,
+  categories: Category[]
+): string[] {
+  const wordsByCategory = mode === 'charades' ? charadesWordsByCategory : pGameWordsByCategory
+  const selectedCategories = categories.length > 0 ? categories : ALL_CATEGORIES
+
+  const allWords: string[] = []
+  for (const category of selectedCategories) {
+    const categoryWords = wordsByCategory[category]
+    if (categoryWords) {
+      allWords.push(...categoryWords[difficulty])
+    }
+  }
+
+  return allWords
+}
+
+// Śledzenie użytych słów
 let usedCharadesWords: string[] = []
 let usedPGameWords: string[] = []
 
@@ -128,11 +151,13 @@ export function getRandomWord(words: string[], usedWords: string[] = []): string
   return availableWords[Math.floor(Math.random() * availableWords.length)]
 }
 
-export function getWordForDifficulty(difficulty: Difficulty, mode: GameMode): string {
-  const wordBank = mode === 'charades' ? charadesWords : pGameWords
+export function getWordForDifficulty(
+  difficulty: Difficulty,
+  mode: GameMode,
+  categories: Category[] = ALL_CATEGORIES
+): string {
   const usedWords = mode === 'charades' ? usedCharadesWords : usedPGameWords
-
-  const words = wordBank[difficulty]
+  const words = getWordsFromCategories(mode, difficulty, categories)
   const word = getRandomWord(words, usedWords)
 
   // Zapisz użyte słowo
@@ -163,8 +188,15 @@ export function resetUsedWords(): void {
  */
 export async function getWordForDifficultyAsync(
   difficulty: Difficulty,
-  mode: GameMode
+  mode: GameMode,
+  categories: Category[] = ALL_CATEGORIES
 ): Promise<string> {
+  // Jeśli wybrane są konkretne kategorie, używaj lokalnych słów
+  // API Poocoo nie obsługuje kategorii
+  if (categories.length > 0 && categories.length < ALL_CATEGORIES.length) {
+    return getWordForDifficulty(difficulty, mode, categories)
+  }
+
   try {
     const word = await fetchWordForDifficulty(difficulty, mode)
     return word
@@ -175,6 +207,19 @@ export async function getWordForDifficultyAsync(
     } else {
       console.warn('Failed to fetch from API, using local words:', error)
     }
-    return getWordForDifficulty(difficulty, mode)
+    return getWordForDifficulty(difficulty, mode, categories)
   }
+}
+
+// Eksportuj stare struktury dla kompatybilności wstecznej
+export const charadesWords = {
+  easy: Object.values(charadesWordsByCategory).flatMap(c => c.easy),
+  medium: Object.values(charadesWordsByCategory).flatMap(c => c.medium),
+  hard: Object.values(charadesWordsByCategory).flatMap(c => c.hard),
+}
+
+export const pGameWords = {
+  easy: Object.values(pGameWordsByCategory).flatMap(c => c.easy),
+  medium: Object.values(pGameWordsByCategory).flatMap(c => c.medium),
+  hard: Object.values(pGameWordsByCategory).flatMap(c => c.hard),
 }

@@ -1,4 +1,4 @@
-import { GameMode, Player, TimeLimit, Difficulty } from '../types'
+import { GameMode, Player, TimeLimit, Difficulty, Category, ALL_CATEGORIES, CATEGORY_LABELS } from '../types'
 import { getDifficultyLabel, getYoungestPlayerAge } from '../utils/difficulty'
 import './GameSetup.css'
 
@@ -7,8 +7,10 @@ interface GameSetupProps {
   players: Player[]
   timeLimit: TimeLimit
   difficulty: Difficulty
+  categories: Category[]
   onPlayersChange: (players: Player[]) => void
   onTimeLimitChange: (timeLimit: TimeLimit) => void
+  onCategoriesChange: (categories: Category[]) => void
   onBack: () => void
   onStart: () => void
 }
@@ -20,8 +22,10 @@ export function GameSetup({
   players,
   timeLimit,
   difficulty,
+  categories,
   onPlayersChange,
   onTimeLimitChange,
+  onCategoriesChange,
   onBack,
   onStart,
 }: GameSetupProps) {
@@ -30,6 +34,23 @@ export function GameSetup({
     ? 'Pokaż gestami, niech inni zgadną!'
     : 'Opisujesz hasło używając wyłącznie słów na literę P'
   const youngestAge = getYoungestPlayerAge(players)
+
+  const handleCategoryToggle = (category: Category) => {
+    if (categories.includes(category)) {
+      // Nie pozwól usunąć ostatniej kategorii
+      if (categories.length > 1) {
+        onCategoriesChange(categories.filter(c => c !== category))
+      }
+    } else {
+      onCategoriesChange([...categories, category])
+    }
+  }
+
+  const handleSelectAllCategories = () => {
+    onCategoriesChange([...ALL_CATEGORIES])
+  }
+
+  const allCategoriesSelected = categories.length === ALL_CATEGORIES.length
 
   const handlePlayerNameChange = (id: string, name: string) => {
     onPlayersChange(players.map(p => p.id === id ? { ...p, name } : p))
@@ -108,6 +129,34 @@ export function GameSetup({
           <button className="add-player-button" onClick={handleAddPlayer}>
             + Dodaj gracza
           </button>
+        </section>
+
+        <section className="categories-section">
+          <div className="section-header">
+            <h2 className="section-title">KATEGORIE SŁÓW</h2>
+            {!allCategoriesSelected && (
+              <button className="select-all-button" onClick={handleSelectAllCategories}>
+                Wybierz wszystkie
+              </button>
+            )}
+          </div>
+          <div className="categories-grid">
+            {ALL_CATEGORIES.map((category) => (
+              <button
+                key={category}
+                className={`category-button ${categories.includes(category) ? 'active' : ''}`}
+                onClick={() => handleCategoryToggle(category)}
+              >
+                {CATEGORY_LABELS[category]}
+              </button>
+            ))}
+          </div>
+          <p className="categories-note">
+            {allCategoriesSelected
+              ? 'Wszystkie kategorie wybrane - słowa mogą też pochodzić z API'
+              : `Wybrano ${categories.length} z ${ALL_CATEGORIES.length} kategorii`
+            }
+          </p>
         </section>
 
         <div className="difficulty-indicator">
