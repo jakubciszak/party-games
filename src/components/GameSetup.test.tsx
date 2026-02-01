@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { GameSetup } from './GameSetup'
-import { Player } from '../types'
+import { Player, ALL_CATEGORIES } from '../types'
 
 describe('GameSetup', () => {
   const defaultPlayers: Player[] = [
@@ -14,8 +14,10 @@ describe('GameSetup', () => {
     players: defaultPlayers,
     timeLimit: 60 as const,
     difficulty: 'hard' as const,
+    categories: [...ALL_CATEGORIES],
     onPlayersChange: vi.fn(),
     onTimeLimitChange: vi.fn(),
+    onCategoriesChange: vi.fn(),
     onBack: vi.fn(),
     onStart: vi.fn(),
   }

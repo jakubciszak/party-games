@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { GamePlay } from './GamePlay'
-import { GameSettings, Player } from '../types'
+import { GameSettings, Player, ALL_CATEGORIES } from '../types'
 
 describe('GamePlay', () => {
   const mockPlayers: Player[] = [
@@ -14,6 +14,7 @@ describe('GamePlay', () => {
     players: mockPlayers,
     timeLimit: 60,
     difficulty: 'easy',
+    categories: [...ALL_CATEGORIES],
   }
 
   const defaultProps = {

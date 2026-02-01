@@ -202,6 +202,70 @@
   color: var(--accent-teal);
 }
 
+/* Categories section */
+.categories-section {
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+}
+
+.select-all-button {
+  background: transparent;
+  color: var(--accent-teal);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border: 1px solid var(--accent-teal);
+  border-radius: 4px;
+}
+
+.select-all-button:hover {
+  background: rgba(61, 204, 199, 0.1);
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.category-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--text-secondary);
+  font-size: 0.813rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.category-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-teal);
+}
+
+.category-button.active {
+  background: rgba(61, 204, 199, 0.2);
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}
+
+.categories-note {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
 .difficulty-indicator {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;

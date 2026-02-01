@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { GameMode, GameSettings, Player, TimeLimit } from './types'
+import { GameMode, GameSettings, Player, TimeLimit, Category, ALL_CATEGORIES } from './types'
 import { MainMenu } from './components/MainMenu'
 import { GameSetup } from './components/GameSetup'
 import { GamePlay } from './components/GamePlay'
@@ -23,6 +23,7 @@ function App() {
     { id: '2', name: '', age: 18, score: 0 },
   ])
   const [timeLimit, setTimeLimit] = useState<TimeLimit>(60)
+  const [categories, setCategories] = useState<Category[]>([...ALL_CATEGORIES])
   const [currentRound, setCurrentRound] = useState(1)
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
   const [resultsData, setResultsData] = useState<ResultsData | null>(null)
@@ -40,6 +41,7 @@ function App() {
       { id: '2', name: '', age: 18, score: 0 },
     ])
     setTimeLimit(60)
+    setCategories([...ALL_CATEGORIES])
     setCurrentRound(1)
     setCurrentPlayerIndex(0)
     setResultsData(null)
@@ -75,6 +77,7 @@ function App() {
     players,
     timeLimit,
     difficulty,
+    categories,
   }
 
   return (
@@ -88,8 +91,10 @@ function App() {
           players={players}
           timeLimit={timeLimit}
           difficulty={difficulty}
+          categories={categories}
           onPlayersChange={setPlayers}
           onTimeLimitChange={setTimeLimit}
+          onCategoriesChange={setCategories}
           onBack={handleBackToMenu}
           onStart={handleStartGame}
         />

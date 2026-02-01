@@ -32,9 +32,9 @@ export function GamePlay({
 
   // Generate word on mount
   useEffect(() => {
-    const word = getWordForDifficulty(settings.difficulty, settings.mode)
+    const word = getWordForDifficulty(settings.difficulty, settings.mode, settings.categories)
     setCurrentWord(word)
-  }, [settings.difficulty, settings.mode])
+  }, [settings.difficulty, settings.mode, settings.categories])
 
   // Timer logic
   useEffect(() => {
