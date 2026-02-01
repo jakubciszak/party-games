@@ -232,3 +232,25 @@
 .guessed-button:hover {
   filter: brightness(1.1);
 }
+
+.new-word-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px dashed var(--border-light);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.new-word-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}

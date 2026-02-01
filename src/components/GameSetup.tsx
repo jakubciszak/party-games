@@ -8,9 +8,11 @@ interface GameSetupProps {
   timeLimit: TimeLimit
   difficulty: Difficulty
   categories: Category[]
+  allowWordSkip: boolean
   onPlayersChange: (players: Player[]) => void
   onTimeLimitChange: (timeLimit: TimeLimit) => void
   onCategoriesChange: (categories: Category[]) => void
+  onAllowWordSkipChange: (allowWordSkip: boolean) => void
   onBack: () => void
   onStart: () => void
 }
@@ -23,9 +25,11 @@ export function GameSetup({
   timeLimit,
   difficulty,
   categories,
+  allowWordSkip,
   onPlayersChange,
   onTimeLimitChange,
   onCategoriesChange,
+  onAllowWordSkipChange,
   onBack,
   onStart,
 }: GameSetupProps) {
@@ -186,6 +190,27 @@ export function GameSetup({
               </button>
             ))}
           </div>
+        </section>
+
+        <section className="options-section">
+          <h2 className="section-title">OPCJE GRY</h2>
+          <label className="toggle-option">
+            <span className="toggle-label">Zezwól na zmianę słowa</span>
+            <div className="toggle-switch-container">
+              <input
+                type="checkbox"
+                className="toggle-input"
+                checked={allowWordSkip}
+                onChange={(e) => onAllowWordSkipChange(e.target.checked)}
+              />
+              <span className="toggle-switch"></span>
+            </div>
+          </label>
+          <p className="option-note">
+            {allowWordSkip
+              ? 'Gracze mogą wylosować nowe słowo, jeśli obecne jest za trudne'
+              : 'Gracze muszą zgadywać wylosowane słowo'}
+          </p>
         </section>
 
         <button

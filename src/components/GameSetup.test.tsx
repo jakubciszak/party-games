@@ -15,9 +15,11 @@ describe('GameSetup', () => {
     timeLimit: 60 as const,
     difficulty: 'hard' as const,
     categories: [...ALL_CATEGORIES],
+    allowWordSkip: true,
     onPlayersChange: vi.fn(),
     onTimeLimitChange: vi.fn(),
     onCategoriesChange: vi.fn(),
+    onAllowWordSkipChange: vi.fn(),
     onBack: vi.fn(),
     onStart: vi.fn(),
   }

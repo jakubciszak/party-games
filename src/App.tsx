@@ -24,6 +24,7 @@ function App() {
   ])
   const [timeLimit, setTimeLimit] = useState<TimeLimit>(60)
   const [categories, setCategories] = useState<Category[]>([...ALL_CATEGORIES])
+  const [allowWordSkip, setAllowWordSkip] = useState(true)
   const [currentRound, setCurrentRound] = useState(1)
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0)
   const [resultsData, setResultsData] = useState<ResultsData | null>(null)
@@ -42,6 +43,7 @@ function App() {
     ])
     setTimeLimit(60)
     setCategories([...ALL_CATEGORIES])
+    setAllowWordSkip(true)
     setCurrentRound(1)
     setCurrentPlayerIndex(0)
     setResultsData(null)
@@ -78,6 +80,7 @@ function App() {
     timeLimit,
     difficulty,
     categories,
+    allowWordSkip,
   }
 
   return (
@@ -92,9 +95,11 @@ function App() {
           timeLimit={timeLimit}
           difficulty={difficulty}
           categories={categories}
+          allowWordSkip={allowWordSkip}
           onPlayersChange={setPlayers}
           onTimeLimitChange={setTimeLimit}
           onCategoriesChange={setCategories}
+          onAllowWordSkipChange={setAllowWordSkip}
           onBack={handleBackToMenu}
           onStart={handleStartGame}
         />

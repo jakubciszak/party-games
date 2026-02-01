@@ -55,6 +55,7 @@ export interface GameSettings {
   timeLimit: TimeLimit
   difficulty: Difficulty
   categories: Category[]
+  allowWordSkip: boolean
 }
 
 export interface GameState {
