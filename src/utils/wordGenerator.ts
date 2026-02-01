@@ -1,4 +1,5 @@
 import { Difficulty, GameMode, WordBank } from '../types'
+import { fetchWordForDifficulty, resetUsedApiWords, PoocooApiError } from '../services/poocooApi'
 
 export const charadesWords: WordBank = {
   easy: [
@@ -153,4 +154,27 @@ export function getWordForDifficulty(difficulty: Difficulty, mode: GameMode): st
 export function resetUsedWords(): void {
   usedCharadesWords = []
   usedPGameWords = []
+  resetUsedApiWords()
+}
+
+/**
+ * Fetches a word from Poocoo API with fallback to local words
+ * This is the async version that tries API first, then falls back to local data
+ */
+export async function getWordForDifficultyAsync(
+  difficulty: Difficulty,
+  mode: GameMode
+): Promise<string> {
+  try {
+    const word = await fetchWordForDifficulty(difficulty, mode)
+    return word
+  } catch (error) {
+    // Log error for debugging but fall back silently to local words
+    if (error instanceof PoocooApiError) {
+      console.warn(`Poocoo API error: ${error.message}, using local words`)
+    } else {
+      console.warn('Failed to fetch from API, using local words:', error)
+    }
+    return getWordForDifficulty(difficulty, mode)
+  }
 }
