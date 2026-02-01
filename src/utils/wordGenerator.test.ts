@@ -1,11 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   getRandomWord,
   getWordForDifficulty,
+  getWordForDifficultyAsync,
+  resetUsedWords,
   charadesWords,
   pGameWords
 } from './wordGenerator'
 import { Difficulty, GameMode } from '../types'
+import * as poocooApi from '../services/poocooApi'
 
 describe('wordGenerator', () => {
   describe('word banks', () => {
@@ -65,6 +68,113 @@ describe('wordGenerator', () => {
       }
       // Should have at least some variety (not all the same word)
       expect(results.size).toBeGreaterThan(1)
+    })
+  })
+
+  describe('getWordForDifficultyAsync', () => {
+    beforeEach(() => {
+      vi.clearAllMocks()
+      resetUsedWords()
+    })
+
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    it('should return word from API when successful', async () => {
+      const mockWord = 'słowoZApi'
+      vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockResolvedValueOnce(mockWord)
+
+      const result = await getWordForDifficultyAsync('easy', 'charades')
+
+      expect(result).toBe(mockWord)
+      expect(poocooApi.fetchWordForDifficulty).toHaveBeenCalledWith('easy', 'charades')
+    })
+
+    it('should return word from API for p-game mode', async () => {
+      const mockWord = 'piłka'
+      vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockResolvedValueOnce(mockWord)
+
+      const result = await getWordForDifficultyAsync('medium', 'p-game')
+
+      expect(result).toBe(mockWord)
+      expect(poocooApi.fetchWordForDifficulty).toHaveBeenCalledWith('medium', 'p-game')
+    })
+
+    it('should fallback to local words on API error', async () => {
+      vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockRejectedValueOnce(
+        new poocooApi.PoocooApiError('Network error', 500)
+      )
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      const result = await getWordForDifficultyAsync('easy', 'charades')
+
+      // Should return a word from local charades easy words
+      expect(charadesWords.easy).toContain(result)
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Poocoo API error')
+      )
+    })
+
+    it('should fallback to local words on generic error', async () => {
+      vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockRejectedValueOnce(
+        new Error('Unknown error')
+      )
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      const result = await getWordForDifficultyAsync('medium', 'p-game')
+
+      // Should return a word from local p-game medium words
+      expect(pGameWords.medium).toContain(result)
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to fetch from API'),
+        expect.any(Error)
+      )
+    })
+
+    it('should work for all difficulty levels with API', async () => {
+      const difficulties: Difficulty[] = ['easy', 'medium', 'hard']
+      const modes: GameMode[] = ['charades', 'p-game']
+
+      for (const difficulty of difficulties) {
+        for (const mode of modes) {
+          const mockWord = `${difficulty}-${mode}-word`
+          vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockResolvedValueOnce(mockWord)
+
+          const result = await getWordForDifficultyAsync(difficulty, mode)
+
+          expect(result).toBe(mockWord)
+        }
+      }
+    })
+
+    it('should work for all difficulty levels with fallback', async () => {
+      const difficulties: Difficulty[] = ['easy', 'medium', 'hard']
+      const modes: GameMode[] = ['charades', 'p-game']
+      vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+      for (const difficulty of difficulties) {
+        for (const mode of modes) {
+          vi.spyOn(poocooApi, 'fetchWordForDifficulty').mockRejectedValueOnce(
+            new Error('API unavailable')
+          )
+
+          const result = await getWordForDifficultyAsync(difficulty, mode)
+          const wordBank = mode === 'charades' ? charadesWords : pGameWords
+
+          expect(wordBank[difficulty]).toContain(result)
+        }
+      }
+    })
+  })
+
+  describe('resetUsedWords', () => {
+    it('should also reset API used words', () => {
+      vi.spyOn(poocooApi, 'resetUsedApiWords')
+
+      resetUsedWords()
+
+      expect(poocooApi.resetUsedApiWords).toHaveBeenCalled()
     })
   })
 })
