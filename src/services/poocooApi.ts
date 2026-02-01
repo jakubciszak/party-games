@@ -178,6 +178,7 @@ const difficultyConfig: Record<Difficulty, WordFetchConfig> = {
  */
 export async function fetchWordForDifficulty(
   difficulty: Difficulty,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _mode: GameMode
 ): Promise<string> {
   const config = difficultyConfig[difficulty]
